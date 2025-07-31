@@ -26,20 +26,22 @@ class UserView:
                 print("Opção inválida.")
 
     def register_view(self):
-        username = input("Digite um nome de usuário: ")
-        password = input("Digite uma senha: ")
-        if self.manager.register_user(username, password):
+        username = input("Novo usuário: ")
+        password = input("Nova senha: ")
+        try:
+            self.manager.register_user(username, password)
             print("Usuário registrado com sucesso!")
-        else:
-            print("Usuário já existe.")
+        except ValueError as e:
+            print(f"Erro no registro: {e}")
 
     def login_view(self):
         username = input("Usuário: ")
         password = input("Senha: ")
-        if self.manager.login(username, password):
-            print(f"Bem-vindo, {username}!")
-        else:
-            print("Usuário ou senha incorretos.")
+        try:
+            if self.manager.login(username, password):
+                print("Login bem-sucedido!")
+        except ValueError as e:
+            print(f"Erro no login: {e}")
 
     def listar_usuarios_view(self):
         usuarios = self.manager.listar_usuarios()
