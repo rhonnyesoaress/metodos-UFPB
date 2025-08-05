@@ -18,3 +18,9 @@
  -Imagem 2 - Diagrama de Classes - 
 
  ![alt text](image/image2.png)
+
+ Sprint 2 - Atualização do Diagrama de Classes e Implementação de validação para login e senha e persistência de dados com arquivo JSON.
+
+-Imagem 3 - Diagrama de Classes -
+
+![alt text](image/image3.png)
