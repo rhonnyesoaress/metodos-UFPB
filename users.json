@@ -1,22 +1,51 @@
 [
     {
         "username": "teste",
-        "password": "teste"
+        "password": "teste",
+        "gabarito": {}
     },
     {
         "username": "teste1",
-        "password": "teste1"
+        "password": "teste1",
+        "gabarito": {}
     },
     {
         "username": "Davi",
-        "password": "SenhaSegura123!"
+        "password": "SenhaSegura123!",
+        "gabarito": {}
     },
     {
         "username": "Rhonnye",
-        "password": "SenhaTop123@"
+        "password": "SenhaTop123@",
+        "gabarito": {}
     },
     {
         "username": "Lobato",
-        "password": "SenhaBoa123#"
+        "password": "SenhaBoa123#",
+        "gabarito": {}
+    },
+    {
+        "username": "Fernando",
+        "password": "Ab1!23456",
+        "gabarito": {
+            "q1": "fernando filho",
+            "q2": "fernando",
+            "q3": "jamile",
+            "q4": "joaopessoa",
+            "q5": "2004",
+            "q6": "camarao",
+            "q7": "a",
+            "q8": "programador",
+            "q9": "fevereiro",
+            "q10": "a"
+        }
+    },
+    {
+        "username": "Chico",
+        "password": "Ab345678!",
+        "gabarito": {
+            "01": "chico amargo",
+            "05": "20"
+        }
     }
 ]

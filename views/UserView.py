@@ -1,5 +1,6 @@
 # user_view.py
 from Manager.user_manager import UserManager
+from views.QuestionnaireView import QuestionnaireView
 
 class UserView:
     def __init__(self):
@@ -40,6 +41,9 @@ class UserView:
         try:
             if self.manager.login(username, password):
                 print("Login bem-sucedido!")
+                # após login, executar questionário
+                qview = QuestionnaireView(username)
+                qview.menu()
         except ValueError as e:
             print(f"Erro no login: {e}")
 

@@ -1,0 +1,66 @@
+[
+    {
+        "id": "01",
+        "nome": "Qual o seu nome e sobrenome?",
+        "descricao": "Qual o seu nome e sobrenome?",
+        "dificuldade": "Fácil",
+        "tipo": "text",
+        "opcoes": [],
+        "categoria": "pessoal",
+        "resposta": null
+    },
+    {
+        "id": "02",
+        "nome": "Qual a primeira capital do Brasil ?",
+        "descricao": "Qual a primeira capital do Brasil ?",
+        "dificuldade": "Médio",
+        "tipo": "multiple",
+        "opcoes": [
+            "a) Rio",
+            "b) Salvador",
+            "c) Sao Paulo",
+            "d) Brasilia"
+        ],
+        "categoria": "objetiva",
+        "resposta": "b"
+    },
+    {
+        "id": "03",
+        "nome": "último imperador do Brasil ",
+        "descricao": "Qual foi o último imperador do Brasil ",
+        "dificuldade": "Médio",
+        "tipo": "multiple",
+        "opcoes": [
+            "a) D Pedro I",
+            "b) Dom Pedro II",
+            "c) Princesa Isabel"
+        ],
+        "categoria": "objetiva",
+        "resposta": "c"
+    },
+    {
+        "id": "04",
+        "nome": "Ano em que o homem pisou na lua",
+        "descricao": "qual foi o ano em que o homem pisou na lua ?",
+        "dificuldade": "Médio",
+        "tipo": "multiple",
+        "opcoes": [
+            "a) 1969",
+            "b) 1970",
+            "c) 1960",
+            "d) nunca"
+        ],
+        "categoria": "objetiva",
+        "resposta": "a"
+    },
+    {
+        "id": "05",
+        "nome": "Qual a sua idade?",
+        "descricao": "Qual a sua idade?",
+        "dificuldade": "Fácil",
+        "tipo": "text",
+        "opcoes": [],
+        "categoria": "pessoal",
+        "resposta": null
+    }
+]
