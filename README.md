@@ -38,6 +38,224 @@ Sprint 4 - Diagrama de Classes - Separação das camadas de business e persistê
 
 ![alt text](image/image5.jpg)
 
+Sprint Final - Diagrama de Classes C4- Padrões de Projeto
+- Factory Method:Criar famílias de objetos relacionados sem especificar suas classes concretas
+Classes Envolvidas:
+- UserFileStorage
+- AtividadeFileStorage
+
+- Template Method: Definir o esqueleto de um algoritmo, delegando alguns passos para subclasses
+
+Classes Envolvidas:
+- UserManager → UserFileStorage
+- AtividadeManager → AtividadeFileStorage
+- ReportGenerator → HTMLReportGenerator PDFReportGenerator
+
+- Adapter: Converter a interface de uma classe em outra interface esperada pelos clientes
+
+Classes Envolvidas:
+- UserStorageAdapter
+- LegacyUserStorage
+- UserFileStorage
+
+- Strategy: Definir uma família de algoritmos, encapsular cada um e torná-los intercambiáveis
+
+Classes Envolvidas:
+- LoginValidator
+- PasswordValidator
+
+- MVC: Separar a aplicação em três componentes principais: Model, View e Controller
+
+Classes Envolvidas:
+- Model: User, Atividade, UserManager, AtividadeManager
+- View: UserView, AtividadeView, QuestionnaireView
+- Controller: gerenciamento_app, login_app
+
+## Diagrama Final  
+``` mermaid 
+classDiagram
+    %% ========== PADRÕES DE PROJETO - LEGENDA DE CORES ==========
+    %% 🟩 VERDE: Factory Method
+    %% 🟦 AZUL: Template Method  
+    %% 🟨 AMARELO: Adapter
+    %% 🟪 ROXO: Strategy
+    %% 🟥 VERMELHO: MVC
+
+    %% ========== ENTIDADES (DOMÍNIO) ==========
+    class User {
+        <<Entity>>
+        +String username
+        +String password
+        +Dict gabarito
+        +check_password(password: String) Boolean
+        +to_dict() Dict
+        +from_dict(data: Dict) User
+    }
+
+    class Atividade {
+        <<Entity>>
+        +String id
+        +String nome
+        +String descricao
+        +String dificuldade
+        +String tipo
+        +List opcoes
+        +String categoria
+        +String resposta
+        +to_dict() Dict
+        +from_dict(data: Dict) Atividade
+    }
+
+    %% ========== MANAGER (LÓGICA DE NEGÓCIO) ==========
+    class UserManager {
+        <<Business Logic>>
+        🟦UserFileStorage storage
+        +List users
+        +register_user(username: String, password: String)
+        +login(username: String, password: String) Boolean
+        +listar_usuarios() List
+        +get_user(username: String) User
+        +save_users()
+        +update_gabarito(username: String, gabarito: Dict)
+    }
+
+    class AtividadeManager {
+        <<Business Logic>>
+        🟦AtividadeFileStorage storage
+        +List atividades
+        +listar() List
+        +buscar_por_id(id: String) Atividade
+        +criar(id: String, nome: String, descricao: String, ...) Atividade
+        +atualizar(id: String, ...) Atividade
+        +deletar(id: String) Boolean
+    }
+
+    %% ========== STORAGE (PERSISTÊNCIA) ==========
+    class UserFileStorage {
+        <<Storage>>
+        🟩+String file_path
+        🟩+load_users() List~User~
+        🟩+save_users(users: List~User~)
+    }
+
+    class AtividadeFileStorage {
+        <<Storage>>
+        🟩+String FILE_PATH
+        🟩+load() List~Atividade~
+        🟩+save(atividades: List~Atividade~)
+    }
+
+    %% ========== VALIDATORS (ESTRATÉGIA) ==========
+    class LoginValidator {
+        <<Strategy>>
+        🟪+validate(username: String)
+    }
+
+    class PasswordValidator {
+        <<Strategy>>
+        🟪+validate(password: String)
+    }
+
+    %% ========== VIEWS (APRESENTAÇÃO) ==========
+    class UserView {
+        <<View>>
+        🟥UserManager manager
+        🟥+menu_streamlit()
+    }
+
+    class AtividadeView {
+        <<View>>
+        🟥AtividadeManager manager
+        🟥+menu_streamlit()
+    }
+
+    class QuestionnaireView {
+        <<View>>
+        🟥UserManager manager
+        🟥AtividadeManager atividade_manager
+        🟥+run()
+        🟥+menu_streamlit()
+    }
+
+    %% ========== APPS (CONTROLADORES) ==========
+    class gerenciamento_app {
+        <<Controller>>
+        🟥UserView user_view
+        🟥AtividadeView atividade_view
+        +main()
+    }
+
+    class login_app {
+        <<Controller>>
+        🟥UserManager manager
+        +main()
+    }
+
+    %% ========== ADAPTER (ADAPTAÇÃO) ==========
+    class LegacyUserStorage {
+        <<Legacy>>
+        +load_legacy_users() List
+    }
+
+    class UserStorageAdapter {
+        <<Adapter>>
+        🟨LegacyUserStorage legacy_storage
+        🟨+load_users() List~User~
+        🟨+save_users(users: List~User~)
+    }
+
+    %% ========== TEMPLATE METHOD (RELATÓRIOS) ==========
+    class ReportGenerator {
+        <<Abstract>>
+        🟦+generate_report(data: Dict) String
+        🟦#_format_header() String
+        🟦#_format_body(data: Dict) String
+        🟦#_format_footer() String
+    }
+
+    class HTMLReportGenerator {
+        <<Concrete>>
+        🟦#_format_header() String
+        🟦#_format_body(data: Dict) String
+        🟦#_format_footer() String
+    }
+
+    class PDFReportGenerator {
+        <<Concrete>>
+        🟦#_format_header() String
+        🟦#_format_body(data: Dict) String
+        🟦#_format_footer() String
+    }
+
+    %% ========== RELACIONAMENTOS ==========
+    UserManager --> UserFileStorage : uses
+    UserManager --> LoginValidator : validates with
+    UserManager --> PasswordValidator : validates with
+    UserManager --> User : manages
+    
+    AtividadeManager --> AtividadeFileStorage : uses
+    AtividadeManager --> Atividade : manages
+    
+    UserFileStorage --> User : persists
+    AtividadeFileStorage --> Atividade : persists
+    
+    UserView --> UserManager : controls
+    UserView --> QuestionnaireView : navigates to
+    
+    AtividadeView --> AtividadeManager : controls
+    
+    QuestionnaireView --> UserManager : uses
+    QuestionnaireView --> AtividadeManager : uses
+    
+    gerenciamento_app --> UserView : coordinates
+    gerenciamento_app --> AtividadeView : coordinates
+    
+    UserStorageAdapter --> LegacyUserStorage : adapts
+    UserStorageAdapter ..|> UserFileStorage : implements same interface
+    
+    HTMLReportGenerator --|> ReportGenerator : extends
+    PDFReportGenerator --|> ReportGenerator : extends
+``` 
 
 
 ## Questionário e Atividades (uso rápido)
