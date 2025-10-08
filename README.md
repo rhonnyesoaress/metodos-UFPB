@@ -71,15 +71,16 @@ Classes Envolvidas:
 - View: UserView, AtividadeView, QuestionnaireView
 - Controller: gerenciamento_app, login_app
 
+- LEGENDA DE CORES 
+    🟩 VERDE: Factory Method
+    🟦 AZUL: Template Method  
+    🟨 AMARELO: Adapter
+    🟪 ROXO: Strategy
+    🟥 VERMELHO: MVC
+
 ## Diagrama Final  
 ``` mermaid 
 classDiagram
-    %% ========== PADRÕES DE PROJETO - LEGENDA DE CORES ==========
-    %% 🟩 VERDE: Factory Method
-    %% 🟦 AZUL: Template Method  
-    %% 🟨 AMARELO: Adapter
-    %% 🟪 ROXO: Strategy
-    %% 🟥 VERMELHO: MVC
 
     %% ========== ENTIDADES (DOMÍNIO) ==========
     class User {
