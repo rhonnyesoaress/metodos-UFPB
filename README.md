@@ -134,61 +134,61 @@ classDiagram
     %% ========== STORAGE (PERSISTÊNCIA) ==========
     class UserFileStorage {
         <<Storage>>
-        🟩+String file_path
-        🟩+load_users() List~User~
-        🟩+save_users(users: List~User~)
+        🟦+String file_path
+        🟦+load_users() List~User~
+        🟦+save_users(users: List~User~)
     }
 
     class AtividadeFileStorage {
         <<Storage>>
-        🟩+String FILE_PATH
-        🟩+load() List~Atividade~
-        🟩+save(atividades: List~Atividade~)
+        🟦+String FILE_PATH
+        🟦+load() List~Atividade~
+        🟦+save(atividades: List~Atividade~)
     }
 
     %% ========== VALIDATORS (ESTRATÉGIA) ==========
     class LoginValidator {
         <<Strategy>>
-        🟪+validate(username: String)
+        🟨+validate(username: String)
     }
 
     class PasswordValidator {
         <<Strategy>>
-        🟪+validate(password: String)
+        🟨+validate(password: String)
     }
 
     %% ========== VIEWS (APRESENTAÇÃO) ==========
     class UserView {
         <<View>>
-        🟥UserManager manager
-        🟥+menu_streamlit()
+        🟪UserManager manager
+        🟪+menu_streamlit()
     }
 
     class AtividadeView {
         <<View>>
-        🟥AtividadeManager manager
-        🟥+menu_streamlit()
+        🟪AtividadeManager manager
+        🟪+menu_streamlit()
     }
 
     class QuestionnaireView {
         <<View>>
-        🟥UserManager manager
-        🟥AtividadeManager atividade_manager
-        🟥+run()
-        🟥+menu_streamlit()
+        🟪UserManager manager
+        🟪AtividadeManager atividade_manager
+        🟪+run()
+        🟪+menu_streamlit()
     }
 
     %% ========== APPS (CONTROLADORES) ==========
     class gerenciamento_app {
         <<Controller>>
-        🟥UserView user_view
-        🟥AtividadeView atividade_view
+        🟪UserView user_view
+        🟪AtividadeView atividade_view
         +main()
     }
 
     class login_app {
         <<Controller>>
-        🟥UserManager manager
+        🟪UserManager manager
         +main()
     }
 
@@ -200,32 +200,32 @@ classDiagram
 
     class UserStorageAdapter {
         <<Adapter>>
-        🟨LegacyUserStorage legacy_storage
-        🟨+load_users() List~User~
-        🟨+save_users(users: List~User~)
+        🟥LegacyUserStorage legacy_storage
+        🟥+load_users() List~User~
+        🟥+save_users(users: List~User~)
     }
 
     %% ========== TEMPLATE METHOD (RELATÓRIOS) ==========
     class ReportGenerator {
         <<Abstract>>
-        🟦+generate_report(data: Dict) String
-        🟦#_format_header() String
-        🟦#_format_body(data: Dict) String
-        🟦#_format_footer() String
+        🟩+generate_report(data: Dict) String
+        🟩#_format_header() String
+        🟩#_format_body(data: Dict) String
+        🟩#_format_footer() String
     }
 
     class HTMLReportGenerator {
         <<Concrete>>
-        🟦#_format_header() String
-        🟦#_format_body(data: Dict) String
-        🟦#_format_footer() String
+        🟩#_format_header() String
+        🟩#_format_body(data: Dict) String
+        🟩#_format_footer() String
     }
 
     class PDFReportGenerator {
         <<Concrete>>
-        🟦#_format_header() String
-        🟦#_format_body(data: Dict) String
-        🟦#_format_footer() String
+        🟩#_format_header() String
+        🟩#_format_body(data: Dict) String
+        🟩#_format_footer() String
     }
 
     %% ========== RELACIONAMENTOS ==========
@@ -256,8 +256,8 @@ classDiagram
     
     HTMLReportGenerator --|> ReportGenerator : extends
     PDFReportGenerator --|> ReportGenerator : extends
-``` 
 
+```
 
 ## Questionário e Atividades (uso rápido)
 
