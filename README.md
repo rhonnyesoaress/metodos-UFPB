@@ -71,191 +71,256 @@ Classes Envolvidas:
 - View: UserView, AtividadeView, QuestionnaireView
 - Controller: gerenciamento_app, login_app
 
-- LEGENDA DE CORES 
-    🟩 VERDE: Factory Method
-    🟦 AZUL: Template Method  
-    🟨 AMARELO: Adapter
-    🟪 ROXO: Strategy
-    🟥 VERMELHO: MVC
+========== LEGENDA DE CORES ==========
+ 🟦 Azul  → dependência / associação (usa, possui)
+ 🟨 Amarelo → estratégia / comportamento injetável
+ 🟩 Verde  → template method (relatórios)
+ 🟪 Roxo   → view (camada de apresentação)
+ 🟥 Vermelho → adapter / legado (camada de integração)
 
 ## Diagrama Final  
 ``` mermaid 
 classDiagram
 
-    %% ========== ENTIDADES (DOMÍNIO) ==========
-    class User {
-        <<Entity>>
-        +String username
-        +String password
-        +Dict gabarito
-        +check_password(password: String) Boolean
-        +to_dict() Dict
-        +from_dict(data: Dict) User
-    }
+%% ========== LEGENDA DE CORES ==========
+%% 🟦 Azul  → dependência / associação (usa, possui)
+%% 🟨 Amarelo → estratégia / comportamento injetável
+%% 🟩 Verde  → template method (relatórios)
+%% 🟪 Roxo   → view (camada de apresentação)
+%% 🟥 Vermelho → adapter / legado (camada de integração)
 
-    class Atividade {
-        <<Entity>>
-        +String id
-        +String nome
-        +String descricao
-        +String dificuldade
-        +String tipo
-        +List opcoes
-        +String categoria
-        +String resposta
-        +to_dict() Dict
-        +from_dict(data: Dict) Atividade
-    }
+%% ========== ENTIDADES ==========
+class User {
+  <<Entity>>
+  +String username
+  +String password
+  +Dict gabarito
+  +check_password(password: String) Boolean
+  +to_dict() Dict
+  +from_dict(data: Dict) User
+}
 
-    %% ========== MANAGER (LÓGICA DE NEGÓCIO) ==========
-    class UserManager {
-        <<Business Logic>>
-        🟦UserFileStorage storage
-        +List users
-        +register_user(username: String, password: String)
-        +login(username: String, password: String) Boolean
-        +listar_usuarios() List
-        +get_user(username: String) User
-        +save_users()
-        +update_gabarito(username: String, gabarito: Dict)
-    }
+class Atividade {
+  <<Entity>>
+  +String id
+  +String nome
+  +String descricao
+  +String dificuldade
+  +String tipo
+  +List opcoes
+  +String categoria
+  +String resposta
+  +to_dict() Dict
+  +from_dict(data: Dict) Atividade
+}
 
-    class AtividadeManager {
-        <<Business Logic>>
-        🟦AtividadeFileStorage storage
-        +List atividades
-        +listar() List
-        +buscar_por_id(id: String) Atividade
-        +criar(id: String, nome: String, descricao: String, ...) Atividade
-        +atualizar(id: String, ...) Atividade
-        +deletar(id: String) Boolean
-    }
+%% ========== DOMAIN ==========
+class Question {
+  <<Abstract>>
+  +String id
+  +String enunciado
+  +String dificuldade
+  +avaliar(resposta_usuario: String) Boolean
+}
+class ObjectiveQuestion {
+  +String resposta_correta
+  +List~String~ opcoes
+  +avaliar(resposta_usuario: String) Boolean
+}
+class PersonalQuestion {
+  +avaliar(resposta_usuario: String, gabarito_usuario: String) Boolean
+}
+class Answer {
+  +String question_id
+  +String value
+}
+class Questionnaire {
+  +List~Question~ questions
+  +avaliar(respostas: Dict, gabaritos_pessoais: Dict) Dict
+}
 
-    %% ========== STORAGE (PERSISTÊNCIA) ==========
-    class UserFileStorage {
-        <<Storage>>
-        🟦+String file_path
-        🟦+load_users() List~User~
-        🟦+save_users(users: List~User~)
-    }
+ObjectiveQuestion --|> Question
+PersonalQuestion --|> Question
+Questionnaire ..> Question : aggregates
 
-    class AtividadeFileStorage {
-        <<Storage>>
-        🟦+String FILE_PATH
-        🟦+load() List~Atividade~
-        🟦+save(atividades: List~Atividade~)
-    }
+%% ========== SERVICES ==========
+class QuestionnaireService {
+  +carregar_questionario() Questionnaire
+  +avaliar_para_usuario(username: String, respostas: Dict) Dict
+}
+QuestionnaireService --> Questionnaire : returns
 
-    %% ========== VALIDATORS (ESTRATÉGIA) ==========
-    class LoginValidator {
-        <<Strategy>>
-        🟨+validate(username: String)
-    }
+%% ========== REPOSITORIES (Interfaces de Domínio) ==========
+class IUserRepository {
+  <<Interface>>
+  +obter_por_username(username: String) Any
+  +salvar_gabaritos(username: String, gabaritos: Dict~String,String~) void
+}
+class IAtividadeRepository {
+  <<Interface>>
+  +listar() Iterable~Any~
+}
 
-    class PasswordValidator {
-        <<Strategy>>
-        🟨+validate(password: String)
-    }
+class UserRepository {
+  +obter_por_username(username: String) Any
+  +salvar_gabaritos(username: String, gabaritos: Dict~String,String~) void
+}
+class AtividadeRepository {
+  +listar() Iterable~Any~
+}
 
-    %% ========== VIEWS (APRESENTAÇÃO) ==========
-    class UserView {
-        <<View>>
-        🟪UserManager manager
-        🟪+menu_streamlit()
-    }
+UserRepository ..|> IUserRepository
+AtividadeRepository ..|> IAtividadeRepository
+QuestionnaireService --> IUserRepository : uses
+QuestionnaireService --> IAtividadeRepository : uses
 
-    class AtividadeView {
-        <<View>>
-        🟪AtividadeManager manager
-        🟪+menu_streamlit()
-    }
+%% ========== MANAGERS ==========
+class UserManager {
+  <<Business Logic>>
+  🟦UserFileStorage storage
+  +List~User~ users
+  +register_user(username: String, password: String) void
+  +login(username: String, password: String) Boolean
+  +listar_usuarios() List~User~
+  +get_user(username: String) User
+  +save_users() void
+  +update_gabarito(username: String, gabarito: Dict) void
+}
 
-    class QuestionnaireView {
-        <<View>>
-        🟪UserManager manager
-        🟪AtividadeManager atividade_manager
-        🟪+run()
-        🟪+menu_streamlit()
-    }
+class AtividadeManager {
+  <<Business Logic>>
+  🟦List~Atividade~ atividades
+  +listar() List~Atividade~
+  +buscar_por_id(id: String) Atividade
+  +criar(...) Atividade
+  +atualizar(id: String, ...) Atividade
+  +deletar(id: String) Boolean
+}
 
-    %% ========== APPS (CONTROLADORES) ==========
-    class gerenciamento_app {
-        <<Controller>>
-        🟪UserView user_view
-        🟪AtividadeView atividade_view
-        +main()
-    }
+UserRepository --> UserManager : 🟦 uses
+AtividadeRepository --> AtividadeManager : 🟦 uses
 
-    class login_app {
-        <<Controller>>
-        🟪UserManager manager
-        +main()
-    }
+%% ========== STORAGE ==========
+class UserFileStorage {
+  <<Storage>>
+  🟦+String file_path
+  🟦+load_users() List~User~
+  🟦+save_users(users: List~User~) void
+}
+class AtividadeFileStorage {
+  <<Storage>>
+  🟦+String FILE_PATH
+  🟦+load() List~Atividade~
+  🟦+save(atividades: List~Atividade~) void
+}
 
-    %% ========== ADAPTER (ADAPTAÇÃO) ==========
-    class LegacyUserStorage {
-        <<Legacy>>
-        +load_legacy_users() List
-    }
+UserManager --> UserFileStorage : 🟦 uses
+AtividadeManager --> AtividadeFileStorage : 🟦 uses
+UserFileStorage --> User : persists
+AtividadeFileStorage --> Atividade : persists
 
-    class UserStorageAdapter {
-        <<Adapter>>
-        🟥LegacyUserStorage legacy_storage
-        🟥+load_users() List~User~
-        🟥+save_users(users: List~User~)
-    }
+%% ========== VALIDATORS ==========
+class LoginValidator {
+  <<Strategy>>
+  🟨+validate(username: String) void
+}
+class PasswordValidator {
+  <<Strategy>>
+  🟨+validate(password: String) void
+}
 
-    %% ========== TEMPLATE METHOD (RELATÓRIOS) ==========
-    class ReportGenerator {
-        <<Abstract>>
-        🟩+generate_report(data: Dict) String
-        🟩#_format_header() String
-        🟩#_format_body(data: Dict) String
-        🟩#_format_footer() String
-    }
+UserManager --> LoginValidator : 🟨 validates
+UserManager --> PasswordValidator : 🟨 validates
 
-    class HTMLReportGenerator {
-        <<Concrete>>
-        🟩#_format_header() String
-        🟩#_format_body(data: Dict) String
-        🟩#_format_footer() String
-    }
+%% ========== REPORTING (BUSINESS) ==========
+class ReportGenerator {
+  <<Abstract>>
+  🟩+generate_report(data: Dict) String
+  🟩#_format_header() String
+  🟩#_format_body(data: Dict) String
+  🟩#_format_footer() String
+}
+class HTMLReportGenerator {
+  <<Concrete>>
+  🟩#_format_header() String
+  🟩#_format_body(data: Dict) String
+  🟩#_format_footer() String
+}
+class PDFReportGenerator {
+  <<Concrete>>
+  🟩#_format_header() String
+  🟩#_format_body(data: Dict) String
+  🟩#_format_footer() String
+}
 
-    class PDFReportGenerator {
-        <<Concrete>>
-        🟩#_format_header() String
-        🟩#_format_body(data: Dict) String
-        🟩#_format_footer() String
-    }
+HTMLReportGenerator --|> ReportGenerator
+PDFReportGenerator --|> ReportGenerator
 
-    %% ========== RELACIONAMENTOS ==========
-    UserManager --> UserFileStorage : uses
-    UserManager --> LoginValidator : validates with
-    UserManager --> PasswordValidator : validates with
-    UserManager --> User : manages
-    
-    AtividadeManager --> AtividadeFileStorage : uses
-    AtividadeManager --> Atividade : manages
-    
-    UserFileStorage --> User : persists
-    AtividadeFileStorage --> Atividade : persists
-    
-    UserView --> UserManager : controls
-    UserView --> QuestionnaireView : navigates to
-    
-    AtividadeView --> AtividadeManager : controls
-    
-    QuestionnaireView --> UserManager : uses
-    QuestionnaireView --> AtividadeManager : uses
-    
-    gerenciamento_app --> UserView : coordinates
-    gerenciamento_app --> AtividadeView : coordinates
-    
-    UserStorageAdapter --> LegacyUserStorage : adapts
-    UserStorageAdapter ..|> UserFileStorage : implements same interface
-    
-    HTMLReportGenerator --|> ReportGenerator : extends
-    PDFReportGenerator --|> ReportGenerator : extends
+class RelatorioView {
+  <<View>>
+  🟪+render(data: Dict) void
+}
+class ReportView {
+  <<View>>
+  🟪+render_html(data: Dict) void
+  🟪+render_pdf(data: Dict) void
+}
+
+RelatorioView --> ReportGenerator : 🟩 uses
+ReportView --> HTMLReportGenerator : 🟩 uses
+ReportView --> PDFReportGenerator : 🟩 uses
+
+%% ========== VIEWS (CRUD/QUESTIONÁRIO) ==========
+class UserView {
+  <<View>>
+  🟪UserManager manager
+  🟪+menu_streamlit() void
+}
+class AtividadeView {
+  <<View>>
+  🟪AtividadeManager manager
+  🟪+menu_streamlit() void
+}
+class QuestionnaireView {
+  <<View>>
+  🟪UserManager manager
+  🟪AtividadeManager atividade_manager
+  🟪+menu_streamlit() void
+}
+
+UserView --> UserManager : 🟪 controls
+AtividadeView --> AtividadeManager : 🟪 controls
+QuestionnaireView --> UserManager : 🟪 uses
+QuestionnaireView --> AtividadeManager : 🟪 uses
+
+%% ========== CONTROLLERS ==========
+class main_py {
+  <<Controller>>
+  +main()
+}
+main_py --> UserView : 🟪 coordinates
+main_py --> AtividadeView : 🟪 coordinates
+main_py --> QuestionnaireView : 🟪 coordinates
+
+%% ========== (OPCIONAL) LEGACY/ADAPTER ==========
+class LegacyUserStorage {
+  <<Legacy>>
+  🟥+load_legacy_users() List
+}
+class UserStorageAdapter {
+  <<Adapter>>
+  🟥LegacyUserStorage legacy_storage
+  🟥+load_users() List~User~
+}
+
+class LegacyUserRepositoryAdapter {
+  🟥+obter_por_username(username: String) Any
+  🟥+salvar_gabaritos(username: String, gabaritos: Dict) void
+}
+LegacyUserRepositoryAdapter ..|> IUserRepository
+LegacyUserRepositoryAdapter --> UserStorageAdapter : 🟥 uses
+UserStorageAdapter --> LegacyUserStorage : 🟥 adapts
+
 
 ```
 
