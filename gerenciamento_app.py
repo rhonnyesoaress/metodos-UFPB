@@ -6,6 +6,7 @@ import streamlit as st
 # usarem st.write, st.button, st.form, etc., em vez de print e input.
 from views.UserView import UserView
 from views.AtividadeView import AtividadeView 
+from views.ReportView import ReportView
 
 # Instancia as classes de View (a ser chamado conforme a escolha do menu)
 user_view = UserView()
@@ -21,8 +22,8 @@ def main():
 
     # --- Estrutura de Menu com Abas (Tabs) ---
     # Usamos st.tabs para criar a navegação principal
-    tab_inicio, tab_usuarios, tab_atividades = st.tabs(
-        ["🏠 Início", "👤 Gerenciar Usuários", "📝 Gerenciar Atividades"]
+    tab_inicio, tab_usuarios, tab_atividades, tab_relatorios = st.tabs(
+        ["🏠 Início", "👤 Gerenciar Usuários", "📝 Gerenciar Atividades", "Gerar Relatórios"]
     )
 
     with tab_inicio:
@@ -48,6 +49,14 @@ def main():
         # Chama um método da sua classe adaptado para Streamlit
         # Sua AtividadeView.menu() precisa ser reescrita para renderizar componentes
         atividade_view.menu_streamlit()
+
+    with tab_relatorios:
+        st.header("📊 Geração de Relatórios")
+        # Instancia ReportView com as atividades gerenciadas
+        # Você precisará passar a lista ou gerenciador de atividades
+        # Aqui assumimos que atividade_view tem um atributo 'atividades'
+        report_view = ReportView(atividade_view.manager)
+        report_view.render()
 
 if __name__ == "__main__":
     main()

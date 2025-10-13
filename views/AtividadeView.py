@@ -39,6 +39,7 @@ class AtividadeView:
         Exibe a lista de atividades em um st.dataframe.
         """
         atividades = self.manager.listar()
+        atividades = self.manager.listar()
 
         if not atividades:
             st.info("Nenhuma atividade cadastrada.")
@@ -60,7 +61,7 @@ class AtividadeView:
             data.append(row)
 
         df = pd.DataFrame(data)
-        st.dataframe(df, hide_index=True, use_container_width=True)
+        st.dataframe(df, hide_index=True, width="stretch")
 
     def _formatar_detalhes(self, atividade):
         """Função auxiliar para formatar detalhes específicos."""

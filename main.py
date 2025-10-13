@@ -12,6 +12,7 @@ def main():
         print("1 - Gerenciar Usuários")
         print("2 - Gerenciar Atividades")
         print("3 - Executar Questionário")
+        print("4 - Gerar Relatórios")
         print("0 - Sair")
 
         opcao = input("Escolha: ")
@@ -56,8 +57,13 @@ def main():
         elif opcao == "0":
             print("Encerrando o sistema...")
             break
+        
+        elif opcao == '4':
+            from Presentation.RelatorioView import RelatorioView
+            rel_view = RelatorioView(atividade_manager)
+            rel_view.menu()
         else:
-            print("Opção inválida. Tente novamente.")
+                    print("Opção inválida. Tente novamente.")
 
 if __name__ == "__main__":
     main()

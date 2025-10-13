@@ -32,7 +32,7 @@ class UserView:
         if st.button("Sair (Logout)", type="secondary"):
             st.session_state['logged_in'] = False
             st.session_state['current_user'] = None
-            st.experimental_rerun() # Reinicia a página para mostrar o menu de login
+            st.rerun() # Reinicia a página para mostrar o menu de login
 
         st.divider()
         st.header("Responder Questionário")
@@ -93,7 +93,7 @@ class UserView:
                         st.session_state['logged_in'] = True
                         st.session_state['current_user'] = username
                         st.success("Login bem-sucedido! Redirecionando...")
-                        st.experimental_rerun() # Recarrega a página para mostrar o menu pós-login
+                        st.rerun() # Recarrega a página para mostrar o menu pós-login
                     else:
                         st.error("Usuário ou senha inválidos.")
                 except ValueError as e:
