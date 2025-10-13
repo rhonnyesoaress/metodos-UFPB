@@ -5,7 +5,7 @@
 
  A aplicação visa, com o acompanhamento da Inteligência Artificial, criar um caminho de jogos para os níveis de perdas cognitivas diversas. Tal que, o usuário receba um jogo de próxima fase, com base no seu desempenho na anterior, tendo em vista tardar a perca da memória.
 
- Para o desenvolvimento do projeto, a equipe escolhe o desenvolvimento web com a linguagem python com o framework Flask.
+ Para o desenvolvimento do projeto, a equipe escolhe o Desenvolvimento Web com a linguagem Python com a biblioteca Streamlit para interface gráfica.
 
  Documentação de requisitos do projeto: - https://docs.google.com/document/d/1GsUDEq24Sa9pXWozzbTYL8AJC163UCiJ7rDML9g-Ygs/edit?usp=sharing - 
  Sprints:
@@ -366,7 +366,7 @@ Exemplos (via interface de Atividade):
 	- Categoria: `pessoal`
 
 Fluxo do questionário:
-- Execute o app (ou rode `main.py`) e escolha o menu de Atividades para criar as atividades acima.
+- Execute o app (ou rode `streamlit run gerenciamento.py`) e escolha o menu de Atividades para criar as atividades acima.
 - Faça o cadastro/login de um usuário (se necessário).
 - No menu do Questionário, escolha `Fazer questionário` e informe o username.
 
@@ -377,5 +377,5 @@ Comportamento esperado:
 
 Comandos rápidos (PowerShell):
 ```powershell
-python main.py
+streamlit run gerenciamento_app.py
 ```
