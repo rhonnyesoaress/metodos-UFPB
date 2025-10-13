@@ -112,6 +112,7 @@ class Atividade {
   +String resposta
   +to_dict() Dict
   +from_dict(data: Dict) Atividade
+  +accept(visitor) void
 }
 
 %% ========== DOMAIN ==========
@@ -233,42 +234,46 @@ UserManager --> LoginValidator : 🟨 validates
 UserManager --> PasswordValidator : 🟨 validates
 
 %% ========== REPORTING (BUSINESS) ==========
-class ReportGenerator {
+class Report {
   <<Abstract>>
-  🟩+generate_report(data: Dict) String
-  🟩#_format_header() String
-  🟩#_format_body(data: Dict) String
-  🟩#_format_footer() String
+  -implementor
+  🟩+export() void
+  🟩+generate_content() str
 }
-class HTMLReportGenerator {
+class ConsoleOutputImplementor {
   <<Concrete>>
-  🟩#_format_header() String
-  🟩#_format_body(data: Dict) String
-  🟩#_format_footer() String
+  -filename: str
+  🟩save(data: str) void
 }
-class PDFReportGenerator {
+class ActivityReport {
   <<Concrete>>
-  🟩#_format_header() String
-  🟩#_format_body(data: Dict) String
-  🟩#_format_footer() String
+  🟩+_generate_content() str
 }
 
-HTMLReportGenerator --|> ReportGenerator
-PDFReportGenerator --|> ReportGenerator
+class StatisticsVisitor {
+  +activity_count: int
+  +difficulty_count: int
+  +visit_activity() void
+}
 
-class RelatorioView {
+ConsoleOutputImplementor --|> Report
+ActivityReport --|> Report
+ActivityReport --|> StatisticsVisitor
+ActivityReport --|> AtividadeManager
+
+class LogReport {
+  <<Concrete>>
+  🟪+_generate_content() str
+}
+LogReport --> Report : 🟩 uses
+
+class ReportView {
   <<View>>
   🟪+render(data: Dict) void
 }
-class ReportView {
-  <<View>>
-  🟪+render_html(data: Dict) void
-  🟪+render_pdf(data: Dict) void
-}
 
-RelatorioView --> ReportGenerator : 🟩 uses
-ReportView --> HTMLReportGenerator : 🟩 uses
-ReportView --> PDFReportGenerator : 🟩 uses
+ReportView --> ConsoleOutputImplementor : 🟩 uses
+ReportView --> ActivityReport : 🟩 uses
 
 %% ========== VIEWS (CRUD/QUESTIONÁRIO) ==========
 class UserView {
@@ -283,6 +288,7 @@ class AtividadeView {
 }
 class QuestionnaireView {
   <<View>>
+  +String username
   🟪UserManager manager
   🟪AtividadeManager atividade_manager
   🟪+menu_streamlit() void
@@ -294,32 +300,15 @@ QuestionnaireView --> UserManager : 🟪 uses
 QuestionnaireView --> AtividadeManager : 🟪 uses
 
 %% ========== CONTROLLERS ==========
-class main_py {
+class gerenciamento_app.py {
   <<Controller>>
   +main()
 }
-main_py --> UserView : 🟪 coordinates
-main_py --> AtividadeView : 🟪 coordinates
-main_py --> QuestionnaireView : 🟪 coordinates
-
-%% ========== (OPCIONAL) LEGACY/ADAPTER ==========
-class LegacyUserStorage {
-  <<Legacy>>
-  🟥+load_legacy_users() List
-}
-class UserStorageAdapter {
-  <<Adapter>>
-  🟥LegacyUserStorage legacy_storage
-  🟥+load_users() List~User~
-}
-
-class LegacyUserRepositoryAdapter {
-  🟥+obter_por_username(username: String) Any
-  🟥+salvar_gabaritos(username: String, gabaritos: Dict) void
-}
-LegacyUserRepositoryAdapter ..|> IUserRepository
-LegacyUserRepositoryAdapter --> UserStorageAdapter : 🟥 uses
-UserStorageAdapter --> LegacyUserStorage : 🟥 adapts
+gerenciamento_app.py --> UserView : 🟪 coordinates
+gerenciamento_app.py --> AtividadeView : 🟪 coordinates
+gerenciamento_app.py --> QuestionnaireView : 🟪 coordinates
+gerenciamento_app.py --> ReportView : 🟪 coordinates
+gerenciamento_app.py --> AtividadeManager : instantiates
 
 
 ```
