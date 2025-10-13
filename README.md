@@ -377,5 +377,11 @@ Comportamento esperado:
 
 Comandos rápidos (PowerShell):
 ```powershell
+python3 -m venv venv
+```
+```powershell
+pip install streamlit
+```
+```powershell
 streamlit run gerenciamento_app.py
 ```
