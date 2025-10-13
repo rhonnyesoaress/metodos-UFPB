@@ -380,7 +380,7 @@ Comandos rápidos (PowerShell):
 python3 -m venv venv (Criação de ambiente virtual)
 ```
 ```powershell
-pip install streamlit pandas (Instalação das bibliotecas dentro do ambiente virtual)
+pip install -r requirements.txt (Instalação das bibliotecas dentro do ambiente virtual)
 ```
 ```powershell
 streamlit run gerenciamento_app.py
