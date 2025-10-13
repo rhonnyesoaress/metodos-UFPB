@@ -61,6 +61,8 @@ class AtividadeView:
             data.append(row)
 
         df = pd.DataFrame(data)
+        # 'width' must be an int; use_container_width=True makes the dataframe
+        # expand to the container width which matches the previous intention.
         st.dataframe(df, hide_index=True, width="stretch")
 
     def _formatar_detalhes(self, atividade):

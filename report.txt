@@ -1,0 +1,4 @@
+Total de Atividades: 5
+Contagem por Dificuldade:
+  - Fácil: 2
+  - Médio: 3

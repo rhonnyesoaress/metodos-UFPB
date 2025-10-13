@@ -200,6 +200,7 @@ class QuestionnaireView:
         try:
             import pandas as pd
             df = pd.DataFrame(rows)
+            # use_container_width expands the dataframe to fill available width
             st.dataframe(df, width="stretch")
         except Exception:
             # fallback simples
