@@ -9,24 +9,6 @@ class UserManager:
         self.storage = UserFileStorage()
         self.users = self.storage.load_users()  # dict com username -> User
 
-    # def _load_users(self):
-    #     if os.path.exists(self.file_path):
-    #         try:
-    #             with open(self.file_path, 'r') as f:
-    #                 data = json.load(f)
-    #                 if isinstance(data, list):
-    #                     return [User.from_dict(user_data) for user_data in data]
-    #                 else:
-    #                     print('Aviso: Arquivo users.json está mal formatado. Criando nova lista.')
-    #         except (json.JSONDecodeError, FileNotFoundError):
-    #             print('Aviso: Arquivo users.json está corrompido ou vazio. Criano nova lista.')
-    #     return []
-        
-    # def _save_users(self):
-    #     with open(self.file_path, 'w') as f:
-    #         data = [user.to_dict() for user in self.users]
-    #         json.dump(data, f, indent=4)
-
     def register_user(self, username, password):
         LoginValidator.validate(username)
         PasswordValidator.validate(password)

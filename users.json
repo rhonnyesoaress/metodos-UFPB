@@ -12,7 +12,10 @@
     {
         "username": "Davi",
         "password": "SenhaSegura123!",
-        "gabarito": {}
+        "gabarito": {
+            "01": "teste",
+            "05": "21"
+        }
     },
     {
         "username": "Rhonnye",
