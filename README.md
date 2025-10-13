@@ -377,10 +377,10 @@ Comportamento esperado:
 
 Comandos rápidos (PowerShell):
 ```powershell
-python3 -m venv venv
+python3 -m venv venv (Criação de ambiente virtual)
 ```
 ```powershell
-pip install streamlit
+pip install streamlit pandas (Instalação das bibliotecas dentro do ambiente virtual)
 ```
 ```powershell
 streamlit run gerenciamento_app.py
