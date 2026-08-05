@@ -374,3 +374,6 @@ pip install -r requirements.txt (Instalação das bibliotecas dentro do ambiente
 ```powershell
 streamlit run gerenciamento_app.py
 ```
+main.y
+
+E ai fio, forget
