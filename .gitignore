@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Dados gerados ao usar o app
+users.json
+atividades.json
+report.txt
