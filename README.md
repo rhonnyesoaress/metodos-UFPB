@@ -1,9 +1,25 @@
-# metodos-UFPB
- Trabalho de Metodos de Projeto de Software
+# MemórIA: apoio a idosos com Alzheimer
 
- Neste trabalho, implementaremos um sistema de apoio a idosos com Alzheimer, como forma de tardamento das perdas cognitivas dos usuários.
+Trabalho da disciplina de **Métodos de Projeto de Software** (UFPB), feito em equipe ao longo de sprints.
 
- A aplicação visa, com o acompanhamento da Inteligência Artificial, criar um caminho de jogos para os níveis de perdas cognitivas diversas. Tal que, o usuário receba um jogo de próxima fase, com base no seu desempenho na anterior, tendo em vista tardar a perca da memória.
+**Stack:** Python · Streamlit · persistência em JSON
+**Padrões aplicados:** Factory Method · Template Method · Adapter · Strategy · Visitor · Bridge · MVC
+
+### Como rodar
+
+```bash
+python -m venv venv
+pip install -r requirements.txt
+streamlit run gerenciamento_app.py
+```
+
+Os arquivos `users.json`, `atividades.json` e `report.txt` são criados pelo próprio app durante o uso e não ficam no repositório.
+
+---
+
+ Neste trabalho, implementaremos um sistema de apoio a idosos com Alzheimer, como forma de retardar as perdas cognitivas dos usuários.
+
+ A aplicação visa, com o acompanhamento da Inteligência Artificial, criar um caminho de jogos para os níveis de perdas cognitivas diversas. Tal que, o usuário receba um jogo de próxima fase, com base no seu desempenho na anterior, tendo em vista retardar a perda da memória.
 
  Para o desenvolvimento do projeto, a equipe escolhe o Desenvolvimento Web com a linguagem Python com a biblioteca Streamlit para interface gráfica.
 
@@ -32,7 +48,7 @@ Sprint 3 - Atualização do Diagrama de Classe - Implementação da camada de Ta
 
 ![alt text](image/image4.png)
 
-Sprint 4 - Diagrama de Classes - Separação das camadas de business e persistência, implementando o uso de Factory Method. Além do uso do padrão Adapter para o cenário de "adaptar" a interface do LegacyUserStorage para a interface DAO . Na camada business foi implementado com Template Method a geração de relotório em HTML e PDF, gerando estatísticas de acesso ao sistema pelo usuário
+Sprint 4 - Diagrama de Classes - Separação das camadas de business e persistência, implementando o uso de Factory Method. Além do uso do padrão Adapter para o cenário de "adaptar" a interface do LegacyUserStorage para a interface DAO . Na camada business foi implementado com Template Method a geração de relatório em HTML e PDF, gerando estatísticas de acesso ao sistema pelo usuário
 
 -Imagem 5 - Diagrama de Classes -
 
@@ -355,7 +371,7 @@ Exemplos (via interface de Atividade):
 	- Categoria: `pessoal`
 
 Fluxo do questionário:
-- Execute o app (ou rode `streamlit run gerenciamento.py`) e escolha o menu de Atividades para criar as atividades acima.
+- Execute o app (ou rode `streamlit run gerenciamento_app.py`) e escolha o menu de Atividades para criar as atividades acima.
 - Faça o cadastro/login de um usuário (se necessário).
 - No menu do Questionário, escolha `Fazer questionário` e informe o username.
 
@@ -374,6 +390,3 @@ pip install -r requirements.txt (Instalação das bibliotecas dentro do ambiente
 ```powershell
 streamlit run gerenciamento_app.py
 ```
-main.y
-
-E ai fio, forget
